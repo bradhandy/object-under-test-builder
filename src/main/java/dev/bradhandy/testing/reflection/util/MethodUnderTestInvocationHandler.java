@@ -3,6 +3,14 @@ package dev.bradhandy.testing.reflection.util;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+/**
+ * Implementation of {@link InvocationHandler} to locate and execute a method with the same name
+ * and argument types within the target object type. The method's accessibility is updated to allow
+ * execution by code normally unauthorized to call the method. Then the method is executed and any
+ * available return value is returned to the caller.
+ *
+ * @author bhandy
+ */
 public final class MethodUnderTestInvocationHandler implements InvocationHandler {
 
   private final Object objectUnderTest;

@@ -56,6 +56,8 @@ import java.util.List;
  *     }
  *   }
  * </pre>
+ *
+ * @author bhandy
  */
 public class ObjectUnderTestProxyRunner extends BlockJUnit4ClassRunner {
 

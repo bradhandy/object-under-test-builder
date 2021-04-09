@@ -53,6 +53,8 @@ import java.lang.reflect.Proxy;
  *     }
  *   }
  * </pre>
+ *
+ * @author bhandy
  */
 public class ObjectUnderTestProxyResolver implements ParameterResolver {
 
@@ -60,6 +62,9 @@ public class ObjectUnderTestProxyResolver implements ParameterResolver {
   public boolean supportsParameter(
       ParameterContext parameterContext, ExtensionContext extensionContext)
       throws ParameterResolutionException {
+
+    // if the @TestProxy annotation is present, then we support the Parameter. any issues later will
+    // throw a ParameterResolutionException.
     return parameterContext.findAnnotation(TestProxy.class).isPresent();
   }
 
@@ -67,11 +72,16 @@ public class ObjectUnderTestProxyResolver implements ParameterResolver {
   public Object resolveParameter(
       ParameterContext parameterContext, ExtensionContext extensionContext)
       throws ParameterResolutionException {
+
+    // Proxies only work if the expected type is an interface. if not, then it's an error.
     Class<?> parameterType = parameterContext.getParameter().getType();
     if (!parameterType.isInterface()) {
       throw new ParameterResolutionException("@TestProxy parameter type must be an interface.");
     }
 
+    // when retrieving the TextProxy annotation, we use "orElseThrow" as the alternative, because
+    // it seemed more appropriate than returning null. hwoever, the implementation of "supports"
+    // should remove any concern of the exception being thrown.
     TestProxy testProxyAnnotation =
         parameterContext
             .findAnnotation(TestProxy.class)
