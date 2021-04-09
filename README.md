@@ -83,7 +83,7 @@ public class RunnerExampleTest {
 }
 ```
 
-# JUnit 5 Examples
+# JUnit 5 Example
 ```java
 @ExtendWith(ObjectUnderTestProxyResolver.class)
 public class ExtensionExampleTest {
