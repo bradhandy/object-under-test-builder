@@ -1,14 +1,13 @@
 package dev.bradhandy.testing.reflection.extension;
 
+import dev.bradhandy.testing.reflection.ObjectUnderTestBuilder;
 import dev.bradhandy.testing.reflection.TestProxy;
-import dev.bradhandy.testing.reflection.util.MethodUnderTestInvocationHandler;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Proxy;
 
 /**
  * Implementation of {@link ParameterResolver} to create proxies wrapping an object under test in
@@ -94,10 +93,7 @@ public class ObjectUnderTestProxyResolver implements ParameterResolver {
       objectUnderTestField.setAccessible(true);
 
       Object objectUnderTest = objectUnderTestField.get(testInstance);
-      return Proxy.newProxyInstance(
-          Thread.currentThread().getContextClassLoader(),
-          new Class<?>[] {parameterType},
-          new MethodUnderTestInvocationHandler(objectUnderTest));
+      return ObjectUnderTestBuilder.using(objectUnderTest).conformingTo(parameterType).build();
     } catch (NoSuchFieldException | IllegalAccessException e) {
       throw new ParameterResolutionException(
           String.format(

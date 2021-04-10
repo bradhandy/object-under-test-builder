@@ -6,15 +6,49 @@ inaccessible methods is just boilerplate. Now it doesn't have
 to be.
 
 # Solution
-The Object Under Test Proxy library provides a JUnit 4
-Runner supporting a single annotated test method parameter,
-and a JUnit 5 ParameterResolver supporting any parameter with
-the correct annotation. The parameter's value will be a Proxy
-wrapping the object under test using a custom interface. The
-interface's methods just need to match the signature of the
-inaccessible methods under test.
+The Object Under Test Proxy library provides a stand-alone builder for
+creating proxies providing access to private method matching the
+signatures of a provided interface. The builder is used by a custom
+JUnit 4 Runner, and a JUnit 5 ParameterResolver. Both component support
+creating proxies on-the-fly according to the annotated parameter's type.
 
 # Usage
+
+## ObjectUnderTestBuilder
+The `ObjectUnderTestBuilder` can use an existing object instance or one
+created by a `Supplier`. The object can be retrieved directly without a
+proxy, or you may specify one or more interfaces using the `confirmingTo`
+method. This returns a builder capable of creating proxies conforming to
+the configured interfaces.
+
+### Examples
+```java
+public class SomeClass {
+
+  // other methods
+
+  private void methodToBeInvoked() {
+    // method's logic.
+  }
+}
+
+public interface MethodExposingInterface {
+  void methodToBeInvoked();
+}
+
+// Return object under test without a proxy
+SomeClass someInstance = ObjectUnderTestBuilder.using(new SomeClass()).build();
+
+// Return a supplier object under test.
+SomeClass someInstance = ObjectUnderTestBuilder.suppliedBy(() -> new SomeClass()).build();
+
+// Return a proxy conforming to one or more interfaces.
+MethodExposingInterface objectUnderTest = 
+    ObjectUnderTestBuilder
+        .using(new SomeClass())
+        .conformingTo(MethodExposingInterface.class)
+        .build();
+```
 
 ## JUnit 4 Test Runner
 

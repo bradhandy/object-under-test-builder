@@ -1,14 +1,13 @@
 package dev.bradhandy.testing.reflection.runner;
 
+import dev.bradhandy.testing.reflection.ObjectUnderTestBuilder;
 import dev.bradhandy.testing.reflection.TestProxy;
-import dev.bradhandy.testing.reflection.util.MethodUnderTestInvocationHandler;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Parameter;
-import java.lang.reflect.Proxy;
 
 /**
  * Implementation of {@link Statement} to create a Proxy around the object under test. The proxy's
@@ -55,9 +54,8 @@ public class InvokeMethodWithParametersStatement extends Statement {
     // the expected parameter. the InvocationHandle we provide will receive the value of the field
     // as the target object for invoking the private method matching the interface definition.
     Object objectUnderTest = fieldUnderTest.get(target);
-    return Proxy.newProxyInstance(
-        Thread.currentThread().getContextClassLoader(),
-        new Class<?>[] {proxyParameter.getType()},
-        new MethodUnderTestInvocationHandler(objectUnderTest));
+    return ObjectUnderTestBuilder.using(objectUnderTest)
+        .conformingTo(proxyParameter.getType())
+        .build();
   }
 }
