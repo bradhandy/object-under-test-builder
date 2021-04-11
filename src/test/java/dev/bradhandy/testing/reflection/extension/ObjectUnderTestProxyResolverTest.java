@@ -25,7 +25,7 @@ import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-public class ObjectUnderTestProxyResolverTest {
+class ObjectUnderTestProxyResolverTest {
 
   private ObjectUnderTestProxyResolver objectUnderTestProxyResolver =
       new ObjectUnderTestProxyResolver();

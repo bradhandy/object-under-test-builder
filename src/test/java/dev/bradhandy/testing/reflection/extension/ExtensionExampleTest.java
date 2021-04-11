@@ -10,7 +10,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @ExtendWith(ObjectUnderTestProxyResolver.class)
-public class ExtensionExampleTest {
+class ExtensionExampleTest {
 
   private SomeClass myObjectUnderTest = new SomeClass();
 

@@ -1,15 +1,15 @@
 package dev.bradhandy.testing.reflection;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ObjectUnderTestBuilderTest {
+class ObjectUnderTestBuilderTest {
 
   @Test
-  public void ruleCanBeCreatedWithExistingObject() {
+  void ruleCanBeCreatedWithExistingObject() {
     SomeClass someInstance = new SomeClass("test");
     ObjectUnderTestBuilder objectUnderTestBuilder = ObjectUnderTestBuilder.using(someInstance);
 
@@ -17,7 +17,7 @@ public class ObjectUnderTestBuilderTest {
   }
 
   @Test
-  public void ruleCanBeCreatedWithSupplier() {
+  void ruleCanBeCreatedWithSupplier() {
     SomeClass someInstance = new SomeClass("test");
     ObjectUnderTestBuilder objectUnderTestBuilder =
         ObjectUnderTestBuilder.suppliedBy(() -> someInstance);
@@ -26,7 +26,7 @@ public class ObjectUnderTestBuilderTest {
   }
 
   @Test
-  public void ruleWithCustomSupplierCreatesNewInstanceEveryTime() {
+  void ruleWithCustomSupplierCreatesNewInstanceEveryTime() {
     final AtomicReference<String> initializationParameter = new AtomicReference<>("test");
     ObjectUnderTestBuilder objectUnderTestBuilder =
         ObjectUnderTestBuilder.suppliedBy(() -> new SomeClass(initializationParameter.get()));
@@ -39,7 +39,7 @@ public class ObjectUnderTestBuilderTest {
   }
 
   @Test
-  public void ruleCanCreateProxyToExecutePrivateMethods() {
+  void ruleCanCreateProxyToExecutePrivateMethods() {
     SomeClass someInstance = new SomeClass("test");
     ObjectUnderTestBuilder objectUnderTestBuilder =
         ObjectUnderTestBuilder.using(someInstance).conformingTo(MethodExposingInterface.class);
@@ -48,16 +48,33 @@ public class ObjectUnderTestBuilderTest {
     assertThat(objectUnderTest.privateMethodToInvoke()).isEqualTo("invokedPrivateMethod");
   }
 
-  private interface MethodExposingInterface {
-    String privateMethodToInvoke();
+  @Test
+  void ruleCanCreateProxyToExecuteStaticMethods() {
+    MethodExposingInterface classUnderTestProxy =
+        ObjectUnderTestBuilder.using(SomeClass.class)
+            .conformingTo(MethodExposingInterface.class)
+            .build();
+
+    assertThat(classUnderTestProxy.privateStaticMethodToInvoke("someValue"))
+        .isEqualTo("someValueAltered");
   }
 
-  private class SomeClass {
+  private interface MethodExposingInterface {
+    String privateMethodToInvoke();
+
+    String privateStaticMethodToInvoke(String value);
+  }
+
+  private static class SomeClass {
 
     private final String value;
 
     public SomeClass(String value) {
       this.value = value;
+    }
+
+    private static String privateStaticMethodToInvoke(String value) {
+      return value + "Altered";
     }
 
     public String getValue() {
