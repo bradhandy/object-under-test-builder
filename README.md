@@ -12,6 +12,36 @@ signatures of a provided interface. The builder is used by a custom
 JUnit 4 Runner, and a JUnit 5 ParameterResolver. Both component support
 creating proxies on-the-fly according to the annotated parameter's type.
 
+# Download
+
+## Snapshot
+```xml
+<repositories>
+    <repository>
+        <id>[some-unique-id]</id>
+        <name>[some-name]</name>
+        <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>dev.bradhandy.testing</groupId>
+    <artifactId>object-under-test-builder</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <scope>test</scope>
+</dependency>
+```
+
+## Release
+```xml
+<dependency>
+    <groupId>dev.bradhandy.testing</groupId>
+    <artifactId>object-under-test-builder</artifactId>
+    <version><!-- currently not released yet. --></version>
+    <scope>test</scope>
+</dependency>
+```
+
 # Usage
 
 ## ObjectUnderTestBuilder
