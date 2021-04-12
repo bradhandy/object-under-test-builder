@@ -26,6 +26,17 @@ public class InvokeMethodWithParametersStatement extends Statement {
     this.target = target;
   }
 
+  /**
+   * Executes the @Test annotated method.
+   *
+   * <p>If the method accepts more than one argument or the only argument is not annotated with
+   * {@link TestProxy}, then execution will fail. Otherwise, execution will proceed as expected.
+   *
+   * @throws NoSuchFieldException if there is no field defined in the test class with the name
+   *     configured in the {@link TestProxy} annotation.
+   * @throws IllegalAccessException if the field containing the original object under test is not
+   *     accessible.
+   */
   @Override
   public void evaluate() throws Throwable {
 

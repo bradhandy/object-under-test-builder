@@ -65,11 +65,35 @@ public class ObjectUnderTestProxyRunner extends BlockJUnit4ClassRunner {
     super(testClass);
   }
 
+  /**
+   * Creates an {@link InvokeMethodWithParametersStatement} instead of the default {@link
+   * org.junit.internal.runners.statements.InvokeMethod}.
+   *
+   * @param method A reference to the test method to be executed.
+   * @param test The test class instance which is the target of the current test method.
+   * @return A {@link InvokeMethodWithParametersStatement}.
+   */
   @Override
   protected Statement methodInvoker(FrameworkMethod method, Object test) {
     return new InvokeMethodWithParametersStatement(method, test);
   }
 
+  /**
+   * Validates the test method:
+   *
+   * <ul>
+   *   <li>Is public,
+   *   <li>Accepts no more than one argument, and
+   *   <li>If the method accepts a single argument, the argument must:
+   *       <ul>
+   *         <li>have an interface type,
+   *         <li>have a @TestProxy annotation, and
+   *         <li>reference a field with the same name configured in the @TestProxy annotation.
+   *       </ul>
+   * </ul>
+   *
+   * @param errors A List where validation errors will be written.
+   */
   @Override
   protected void validateTestMethods(List<Throwable> errors) {
     List<FrameworkMethod> testMethods = getTestClass().getAnnotatedMethods(Test.class);
