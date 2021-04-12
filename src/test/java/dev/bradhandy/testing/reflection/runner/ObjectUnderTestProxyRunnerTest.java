@@ -2,7 +2,6 @@ package dev.bradhandy.testing.reflection.runner;
 
 import dev.bradhandy.testing.reflection.TestProxy;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.junit.runners.model.InvalidTestClassError;
 
 import java.util.EventListener;
@@ -44,7 +43,7 @@ public class ObjectUnderTestProxyRunnerTest {
   }
 
   @Test
-  public void methodsWithNonExistentObjectUnderTestFailValidation() throws Exception {
+  public void methodsWithNonExistentObjectUnderTestFailValidation() {
     InvalidTestClassError validationError =
         assertThrows(
             InvalidTestClassError.class,
@@ -59,7 +58,7 @@ public class ObjectUnderTestProxyRunnerTest {
   }
 
   @Test
-  public void methodsWithNonInterfaceParametersFailValidation() throws Exception {
+  public void methodsWithNonInterfaceParametersFailValidation() {
     InvalidTestClassError validationError =
         assertThrows(
             InvalidTestClassError.class,
@@ -73,8 +72,9 @@ public class ObjectUnderTestProxyRunnerTest {
             "Method testMethodWithNonInterfaceArgument has parameter whose type is not an interface (java.lang.Object).");
   }
 
-  private interface Excluded {
-
+  @Test
+  public void methodsWithoutArgumentsPassValidation() throws Exception {
+    new ObjectUnderTestProxyRunner(TestCaseWithNoArguments.class);
   }
 
   public static class TestCaseWithMultipleParameters {
@@ -82,7 +82,6 @@ public class ObjectUnderTestProxyRunnerTest {
     private Object objectUnderTest;
 
     @Test
-    @Category(Excluded.class)
     public void testMethodWithMultipleParameters(
         @TestProxy("objectUnderTest") EventListener argumentOne, EventListener argumentTwo) {}
   }
@@ -92,14 +91,12 @@ public class ObjectUnderTestProxyRunnerTest {
     private Object objectUnderTest;
 
     @Test
-    @Category(Excluded.class)
     public void testMethodWithSingleArgumentWithoutAnnotation(EventListener someArgument) {}
   }
 
   public static class TestCaseWithNonExistentTestTarget {
 
     @Test
-    @Category(Excluded.class)
     public void testMethodWithNonExistentObjectUnderTest(
         @TestProxy("nonExistent") EventListener eventListener) {}
   }
@@ -109,7 +106,12 @@ public class ObjectUnderTestProxyRunnerTest {
     private Object objectUnderTest;
 
     @Test
-    @Category(Excluded.class)
     public void testMethodWithNonInterfaceArgument(@TestProxy("objectUnderTest") Object argument) {}
+  }
+
+  public static class TestCaseWithNoArguments {
+
+    @Test
+    public void testMethodWithoutArguments() {}
   }
 }
