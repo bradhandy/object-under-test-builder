@@ -14,7 +14,7 @@ creating proxies on-the-fly according to the annotated parameter's type.
 
 # Download
 
-## Snapshot
+## Snapshots
 ```xml
 <repositories>
     <repository>
@@ -27,7 +27,7 @@ creating proxies on-the-fly according to the annotated parameter's type.
 <dependency>
     <groupId>dev.bradhandy.testing</groupId>
     <artifactId>object-under-test-builder</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version><!-- snapshot version --></version>
     <scope>test</scope>
 </dependency>
 ```
@@ -37,7 +37,7 @@ creating proxies on-the-fly according to the annotated parameter's type.
 <dependency>
     <groupId>dev.bradhandy.testing</groupId>
     <artifactId>object-under-test-builder</artifactId>
-    <version><!-- currently not released yet. --></version>
+    <version>1.0</version>
     <scope>test</scope>
 </dependency>
 ```
