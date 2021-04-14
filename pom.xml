@@ -6,7 +6,14 @@
 
     <groupId>dev.bradhandy.testing</groupId>
     <artifactId>object-under-test-builder</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <name>Object Under Test Builder</name>
+    <version>1.0</version>
+
+    <url>https://github.com/bradhandy/object-under-test-builder</url>
+    <description>
+        Small utility for using interfaces and proxies to expose private methods for testing without
+        all of the Reflection API boilerplate code.
+    </description>
 
     <properties>
         <junit5.version>5.7.1</junit5.version>
@@ -155,4 +162,19 @@
         </developerConnection>
         <url>https://github.com/bradhandy/object-under-test-builder</url>
     </scm>
+
+    <developers>
+        <developer>
+            <id>owner</id>
+            <name>Brad Handy</name>
+            <email>brad.handy@gmail.com</email>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 </project>
