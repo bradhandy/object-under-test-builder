@@ -7,7 +7,7 @@
     <groupId>dev.bradhandy.testing</groupId>
     <artifactId>object-under-test-builder</artifactId>
     <name>Object Under Test Builder</name>
-    <version>1.0</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <url>https://github.com/bradhandy/object-under-test-builder</url>
     <description>
