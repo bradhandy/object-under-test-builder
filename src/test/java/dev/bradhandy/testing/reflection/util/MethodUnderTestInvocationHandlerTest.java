@@ -2,9 +2,11 @@ package dev.bradhandy.testing.reflection.util;
 
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MethodUnderTestInvocationHandlerTest {
 
@@ -62,6 +64,20 @@ class MethodUnderTestInvocationHandlerTest {
     assertThat(SomeClass.wasPrivateStaticMethodInvoked()).isTrue();
   }
 
+  @Test
+  void methodThrowingExceptionShouldUnwrapInvocationTargetException() {
+    MethodExposingInterface objectUnderTest =
+        (MethodExposingInterface)
+            Proxy.newProxyInstance(
+                Thread.currentThread().getContextClassLoader(),
+                new Class[] {MethodExposingInterface.class},
+                new MethodUnderTestInvocationHandler(new SomeClass()));
+
+    assertThatThrownBy(objectUnderTest::methodThrowingException)
+        .isOfAnyClassIn(UnsupportedOperationException.class)
+        .isNotOfAnyClassIn(InvocationTargetException.class);
+  }
+
   interface MethodExposingInterface {
 
     void instanceMethodWithoutArguments();
@@ -71,6 +87,8 @@ class MethodUnderTestInvocationHandlerTest {
     String instanceMethodWithReturnValue();
 
     void privateStaticMethod();
+
+    void methodThrowingException();
   }
 
   static class SomeClass {
@@ -106,6 +124,10 @@ class MethodUnderTestInvocationHandlerTest {
 
     public String getValue() {
       return privateInstanceMethodWithArgumentsValue;
+    }
+
+    private void methodThrowingException() {
+      throw new UnsupportedOperationException("Ima exception.");
     }
   }
 }

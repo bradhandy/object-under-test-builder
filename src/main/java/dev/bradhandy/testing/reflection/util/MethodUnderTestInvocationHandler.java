@@ -1,6 +1,7 @@
 package dev.bradhandy.testing.reflection.util;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -37,14 +38,18 @@ public final class MethodUnderTestInvocationHandler implements InvocationHandler
    */
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    Class<?> targetClass =
-        (objectUnderTest instanceof Class)
-            ? (Class<?>) objectUnderTest
-            : objectUnderTest.getClass();
-    Method targetMethod =
-        targetClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
-    targetMethod.setAccessible(true);
+    try {
+      Class<?> targetClass =
+          (objectUnderTest instanceof Class)
+              ? (Class<?>) objectUnderTest
+              : objectUnderTest.getClass();
+      Method targetMethod =
+          targetClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
+      targetMethod.setAccessible(true);
 
-    return targetMethod.invoke(objectUnderTest, args);
+      return targetMethod.invoke(objectUnderTest, args);
+    } catch (InvocationTargetException e) {
+      throw e.getCause();
+    }
   }
 }
