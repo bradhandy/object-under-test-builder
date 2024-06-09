@@ -37,7 +37,7 @@ creating proxies on-the-fly according to the annotated parameter's type.
 <dependency>
     <groupId>dev.bradhandy.testing</groupId>
     <artifactId>object-under-test-builder</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -47,7 +47,7 @@ creating proxies on-the-fly according to the annotated parameter's type.
 ## ObjectUnderTestBuilder
 The `ObjectUnderTestBuilder` can use an existing object instance or one
 created by a `Supplier`. The object can be retrieved directly without a
-proxy, or you may specify one or more interfaces using the `confirmingTo`
+proxy, or you may specify one or more interfaces using the `conformingTo`
 method. This returns a builder capable of creating proxies conforming to
 the configured interfaces.
 
@@ -108,14 +108,20 @@ method or when it's declared.
 ```java
 @RunWith(ObjectUnderTestProxyRunner.class)
 public class RunnerExampleTest {
-  
+
   private SomeClass myObjectUnderTest = new SomeClass();
+
+  // ... rest of your test class definition
+}
+
+@RunWith(ObjectUnderTestProxyRunner.class)
+public class RunnerExampleWithBeforeMethodTest {
+  private SomeClass myObjectUnderTest;
 
   @Before
   public void setUp() {
-    myObject = new ObjectUnderTest(...);
+    myObjectUnderTest = new SomeClass();
   }
-  
 }
 ```
 
